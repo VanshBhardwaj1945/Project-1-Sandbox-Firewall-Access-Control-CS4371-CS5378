@@ -29,16 +29,17 @@ We encountered several challenges during this project, including configuring Win
 
 <h2>Network Topology</h2>
 <p class="muted">Logical diagram showing networks, router, and hosts:</p>
-<div class="placeholder">
-<!-- INSERT IMAGE: Network topology diagram (show R, Network A & B, IP ranges, services) -->
-Network topology diagram placeholder
+<ol><img src="https://i.imgur.com/cb5KwK2.png" height="40%" width="40%"/><ol>
+<!-- Network topology diagram -->
 </div>
 
 <h2>Step-by-Step Setup</h2>
 <ol>
 <li>Installed VirtualBox/VMware and created VMs for Ubuntu, Kali, Windows XP, and Windows 95.</li>
+<img src="https://i.imgur.com/iG1MSqE.png" height="40%" width="40%"/>
 <li>Configured pfSense router with two interfaces: LAN for Network A, OPT1 for Network B.</li>
 <li>Assigned static IPs and ensured all NICs matched the network topology.</li>
+<img src="https://i.imgur.com/ccb1EGK.png" height="50%" width="50%"/>
 <li>Installed services on Ubuntu (Apache, SSH) and ensured they were running.</li>
 <li>Installed Wireshark and NMap on A.1 and B.1 for traffic capture and network scanning.</li>
 <li>Verified network connectivity: ping, curl, ssh between hosts; verified internet access.</li>
@@ -53,12 +54,29 @@ Network topology diagram placeholder
 <li>Recorded allowed services in a table:</li>
 </ul>
 <div class="placeholder">
-<!-- INSERT IMAGE: Wireshark screenshots -->
-Wireshark screenshot placeholder
+<li>WireShark Screenshoots:</li>
 </div>
 <div class="placeholder">
-<!-- INSERT IMAGE: NMap scans before security policy -->
-NMap scan screenshot placeholder
+<div class="row">
+  <div class="column">
+    <img src="https://i.imgur.com/pMhYda2.png" height="40%" width="40%>
+  </div>
+  <div class="column">
+    <img src="https://i.imgur.com/NrFsGvb.png" height="40%" width="40%>
+  </div>
+</div>
+<li>NMap Screenshoots:</li>
+</div>
+<div class="placeholder">
+<div class="row">
+  <div class="column">
+    <img src="https://i.imgur.com/pMhYda2.png" height="40%" width="40%>
+  </div>
+  <div class="column">
+    <img src="https://i.imgur.com/NrFsGvb.png" height="40%" width="40%>
+  </div>
+</div>
+  
 </div>
 
 <h2>Task IV & V: Security Policy Implementation</h2>
