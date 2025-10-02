@@ -54,26 +54,51 @@ We encountered several challenges during this project, including configuring Win
 <li>Recorded allowed services in a table:</li>
 </ul>
 <div class="placeholder">
-<li>WireShark Screenshoots:</li>
-</div>
-<div class="placeholder">
+  
+<h3>Wireshark Captures</h3>
+<ul>
+  <li>Ping and curl from B.1 → A.1</li>
+  <div class="screenshot">
+    <img src="https://i.imgur.com/Cfs9b6y.png" width="50%">
+  </div>
+
+  <li>SSH from B.1 → A.1</li>
+  <div class="screenshot">
+    <img src="https://i.imgur.com/Bu5DlBx.png" width="50%">
+  </div>
+
+  <li>pfSense Packet Capture B.1 → A.1</li>
+  <div class="screenshot">
+    <img src="https://i.imgur.com/P3JaWdy.png" width="50%">
+  </div>
+
+  <li>Ping from B.1 → A.2</li>
+  <div class="screenshot">
+    <img src="https://i.imgur.com/amkWHpx.png" width="50%">
+  </div>
+
+  <li>Failed curl/ssh from B.1 → A.2</li>
+  <div class="screenshot">
+    <img src="https://i.imgur.com/borAgQu.png" width="50%">
+  </div>
+
+  <li>Ping & curl from B.1 → B.2</li>
+  <div class="screenshot">
+    <img src="https://i.imgur.com/9Ku8xDv.png" width="50%">
+  </div>
+
+  <li>Ping & curl from A.2 → A.1</li>
+  <div class="screenshot">
+    <img src="https://i.imgur.com/aPPdxJM.png" width="50%">
+  </div>
+</ul>
+<p>NMap Screenshots:</p>
 <div class="row">
   <div class="column">
-    <img src="https://i.imgur.com/pMhYda2.png" height="40%" width="40%>
+    <img src="https://i.imgur.com/pMhYda2.png" height="40%" width="40%">
   </div>
   <div class="column">
-    <img src="https://i.imgur.com/NrFsGvb.png" height="40%" width="40%>
-  </div>
-</div>
-<li>NMap Screenshoots:</li>
-</div>
-<div class="placeholder">
-<div class="row">
-  <div class="column">
-    <img src="https://i.imgur.com/pMhYda2.png" height="40%" width="40%>
-  </div>
-  <div class="column">
-    <img src="https://i.imgur.com/NrFsGvb.png" height="40%" width="40%>
+    <img src="https://i.imgur.com/NrFsGvb.png" height="40%" width="40%">
   </div>
 </div>
   
@@ -82,37 +107,54 @@ We encountered several challenges during this project, including configuring Win
 <h2>Task IV & V: Security Policy Implementation</h2>
 <p>The corporate security policy for the internal network (Network A) is as follows:</p>
 <ul>
-<li>Server (A.1) provides HTTP and SSH to internal workstations; HTTP to external hosts.</li>
-<li>Workstations (A.2) can access server and external HTTP; cannot provide services.</li>
-<li>Server cannot initiate connections to external hosts.</li>
-<li>Ping allowed between all internal hosts; external hosts cannot ping internal hosts.</li>
+  <li>Server (A.1) provides HTTP and SSH to internal workstations; HTTP to external hosts.</li>
+  <li>Workstations (A.2) can access server and external HTTP; cannot provide services.</li>
+  <li>Server cannot initiate connections to external hosts.</li>
+  <li>Ping allowed between all internal hosts; external hosts cannot ping internal hosts.</li>
 </ul>
 
 <h3>Access Control Matrix</h3>
 <div class="placeholder">
-<!-- INSERT IMAGE: Table showing subjects (hosts) and objects (services) -->
-Access Control Matrix screenshot placeholder
+  <ol>
+    <li><img src="https://i.imgur.com/p4HTJUe.png" height="40%" width="40%"/></li>
+  </ol>
 </div>
 
+
 <h3>Router Rules in pfSense</h3>
-<div class="placeholder">
-<!-- INSERT IMAGE: Router firewall rules screenshot -->
-Router rules screenshot placeholder
+<div class="row">
+  <div class="column">
+    <img src="https://i.imgur.com/DOAkzbD.png" height="40%" width="40%">
+  </div>
+  <div class="column">
+    <img src="https://i.imgur.com/TYuD7lH.png" height="40%" width="40%">
+  </div>
+  <div class="column">
+    <img src="https://i.imgur.com/7YP6lje.png" height="40%" width="40%">
+  </div>
 </div>
 
 <h3>NMap & Wireshark Post-Implementation</h3>
 <ul>
 <li>Verified exposed services using NMap scans from B.1.</li>
-<li>Captured traffic with Wireshark to confirm policy enforcement.</li>
+<li>Captured traffic with Wireshark from B.1 to confirm policy enforcement.</li>
 <li>Documented differences from pre-policy scans.</li>
 </ul>
-<div class="placeholder">
-<!-- INSERT IMAGE: NMap post-policy -->
-NMap post-policy screenshot placeholder
+<div class="row">
+  <div class="column">
+    <img src="https://i.imgur.com/bZeB44P.png" height="40%" width="40%">
+  </div>
+  <div class="column">
+    <img src="https://i.imgur.com/nYRv0ry.png" height="40%" width="40%">
+  </div>
+  <div class="column">
+    <img src="https://i.imgur.com/DthG8qW.png" height="40%" width="40%">
+  </div>
+</div>
+
 </div>
 <div class="placeholder">
-<!-- INSERT IMAGE: Wireshark post-policy -->
-Wireshark post-policy screenshot placeholder
+<img src="https://i.imgur.com/3UTLdHS.png" height="40%" width="40%">
 </div>
 
 <h2>Task VI: Server Local Firewall Implementation</h2>
@@ -123,11 +165,13 @@ Wireshark post-policy screenshot placeholder
 <li>Confirmed that classified data could not be transferred externally via unauthorized services.</li>
 </ul>
 <div class="placeholder">
-<!-- INSERT IMAGE: Local firewall rules on A.1 -->
-Local firewall rules placeholder
-</div>
+<img src="https://i.imgur.com/f1mLB6a.png" height="40%" width="40%">
+</div>  
 <div class="placeholder">
-<!-- INSERT IMAGE: Wireshark traffic validation -->
+<img src="https://i.imgur.com/W7tmMXL.png" height="40%" width="40%">
+</div>
+ 
+  
 Wireshark traffic post-local firewall placeholder
 </div>
 
