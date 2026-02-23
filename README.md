@@ -1,39 +1,51 @@
-# Project-1: Sandbox, Firewall & Access Control
+# Project-1: Sandbox, Firewall & Access Control  
+**Repo:** https://github.com/VanshBhardwaj1945/Project-1-Sandbox-Firewall-Access-Control-CS4371-CS5378
 
-## Description & Background
+## Table of Contents
 
-This project builds a clean, repeatable virtual sandbox to design, enforce, and verify network security policies.
-Using VirtualBox and a pfSense virtual router, we created two segmented subnets (internal and external) and deployed four virtual machines to emulate a small company environment.
-The lab demonstrates how to combine router-level rules and host-level firewalls to achieve policy goals and how to validate enforcement using scanning and packet-capture tools.
+1. [Overview](#overview)  
+2. [Sandbox Components](#sandbox-components)  
+3. [Tools & Technologies](#tools--technologies-used)  
+4. [Network Topology](#network-topology)  
+5. [Setup](#setup-high-level-steps)  
+6. [Discovery & Baseline Validation](#discovery--baseline-validation)  
+   - [Selected Baseline Captures](#selected-baseline-captures)  
+   - [Nmap Baseline Examples](#nmap-baseline-examples)  
+7. [Security Policy Implementation](#security-policy-implementation)  
+   - [Access Control Matrix](#access-control-matrix)  
+   - [pfSense Rules](#pfsense-rules-visual-snapshots)  
+8. [Post-Implementation Verification](#post-implementation-verification)  
+9. [Host-Level Firewall Configuration](#host-level-firewall-server-a1)  
+10. [Summary Outcomes](#summary-outcomes)
 
-**The sandbox consists of:**
-- **Network A (Internal / Company):** Ubuntu Desktop (A.1 — server) and Windows XP (A.2 — workstation)
-- **Network B (External):** Kali Linux (B.1 — attacker / scanner) and Windows 95 (B.2 — legacy)
-- **Router:** pfSense virtual appliance connecting Network A and Network B
 
-***Notes:***
-- encountered and resolved practical issues such as legacy VM patches (Windows 95), IP/NIC misconfigurations, and identifying which policy items required host-level enforcement rather than router-only rules.
-- There were a lot of tests and trials because this was the first time using and applying networking concepts
+## Overview
+A repeatable VirtualBox-based sandbox designed to implement, enforce, and verify network security policies. The environment models an internal company network and an external attacker network separated by a pfSense virtual router. The project demonstrates how to combine router-level rules and host-level firewall controls and how to validate enforcement using active scanning and packet captures.
+
+## Sandbox components
+- **Network A (Internal / Company)** — Ubuntu Desktop (server) and Windows XP (workstation)  
+- **Network B (External / Attacker)** — Kali Linux (attacker / scanner) and Windows 95 (legacy)  
+- **Router / Firewall** — pfSense virtual appliance connecting Network A and Network B
+
+**Notes / lessons learned**
+- Resolved legacy VM patching and NIC misconfiguration issues to keep the environment reproducible.  
+- Identified policy items that require host-level enforcement when gateway rules were insufficient.  
+- Captured configuration and verification artifacts so the sandbox can be re-created for future testing.
 
 ---
 
-## Tools & Technologies Used
-
-Key tools and skills demonstrated (employer-friendly):
-
-- **Virtualization:** Oracle VirtualBox — VM creation, NIC binding, snapshotting  
-- **Router & firewall:** pfSense — interface configuration, rule authoring, logging  
-- **Operating systems:** Ubuntu Desktop, Windows XP, Kali Linux, Windows 95  
-- **Network analysis & scanning:** Wireshark, Nmap  
+## Tools & technologies used
+- **Virtualization:** VirtualBox (VM creation, NIC binding, snapshots)  
+- **Router & firewall:** pfSense (interface configuration, rule authoring, logging)  
+- **Operating systems:** Ubuntu, Kali Linux, Windows XP, Windows 95 (legacy)  
+- **Network analysis & scanning:** Wireshark, tcpdump, Nmap / Zenmap  
 - **Services:** Apache (HTTP), OpenSSH (SSH)  
 - **Host hardening:** iptables (Ubuntu)  
-- **Testing & validation:** curl, ping, ssh  
+- **Testing & validation:** curl, ping, ssh
 
 ---
 
-## Network Topology
-
-Logical diagram showing networks, router, and hosts:
+## Network topology
 
 <img src="https://i.imgur.com/0PbmIyM.png" width="60%">
 
@@ -41,94 +53,85 @@ Logical diagram showing networks, router, and hosts:
 
 ---
 
-## Step-by-Step Setup
+## Setup (high-level steps)
 
-1. Installed VirtualBox and created VMs for Ubuntu, Kali, Windows XP, and Windows 95.  
+1. Installed Oracle VirtualBox and provisioned VMs for Ubuntu, Kali, Windows XP, and Windows 95.  
    <img src="https://i.imgur.com/iG1MSqE.png" width="60%">
 
 2. Configured pfSense with two interfaces: `LAN` for Network A and `OPT1` for Network B.  
    <img src="https://i.imgur.com/ccb1EGK.png" width="60%">
 
-3. Assigned static IPs and verified NIC-to-subnet mappings.
-4. Installed Apache and OpenSSH on A.1 and verified services.
-5. Installed Wireshark and Nmap on A.1 and B.1.
-6. Validated baseline connectivity using ping, curl, and ssh.
-7. Documented environment quirks to ensure reproducibility.
+3. Assigned static IPs and verified NIC-to-subnet mappings.  
+4. Installed Apache and OpenSSH on the internal server (A.1) and verified services.  
+5. Installed Wireshark and Nmap on attacker and server VMs for traffic capture and scanning.  
+6. Validated baseline connectivity using `ping`, `curl`, and `ssh`.  
+7. Documented environment quirks (snapshots + notes) to ensure reproducibility.
 
 ---
 
-## Task II & III: Network Checks & Diagnosis
+## Discovery & baseline validation
+Performed discovery scans and packet captures to establish a clear baseline before any policy changes.
 
-Discovery scans and packet captures were performed to establish a baseline.
+- Nmap scans from the attacker VM (Kali) to enumerate services and ports.  
+- Wireshark/tcpdump captures during ping, curl, and ssh to verify normal traffic patterns.  
+- Baseline evidence saved for before/after comparison.
 
-- Nmap scans from **B.1 (Kali)**  
-- Wireshark captures during ping, curl, and ssh  
-- Baseline evidence used for later comparison  
-
-### Selected Wireshark Captures (Baseline)
-
-**Ping and curl from B.1 → A.1**  
+### Selected baseline captures
+**Ping and curl from attacker → server**  
 <img src="https://i.imgur.com/Cfs9b6y.png" width="45%">
 
-**SSH from B.1 → A.1**  
+**SSH from attacker → server**  
 <img src="https://i.imgur.com/Bu5DlBx.png" width="45%">
 
-**pfSense packet capture from B.1 → A.1**  
+**pfSense packet capture (attacker → server)**  
 <img src="https://i.imgur.com/P3JaWdy.png" width="45%">
 
-**Ping from B.1 → A.2**  
+**Ping from attacker → workstation**  
 <img src="https://i.imgur.com/amkWHpx.png" width="45%">
 
-**Failed curl/ssh from B.1 → A.2**  
+**Failed curl/ssh from attacker → workstation (expected after rules)**  
 <img src="https://i.imgur.com/borAgQu.png" width="45%">
 
-**Ping & curl from B.1 → B.2**  
+**Ping & curl within external network**  
 <img src="https://i.imgur.com/9Ku8xDv.png" width="45%">
 
-**Ping & curl from A.2 → A.1**  
+**Internal workstation → internal server traffic**  
 <img src="https://i.imgur.com/aPPdxJM.png" width="45%">
 
----
-
-### Nmap Baseline Examples
-
+### Nmap baseline examples
 <img src="https://i.imgur.com/pMhYda2.png" width="60%">
 <img src="https://i.imgur.com/NrFsGvb.png" width="60%">
 
 ---
 
-## Task IV & V: Security Policy Implementation
+## Security policy implementation
+Policy enforcement was implemented primarily in pfSense. Host-level controls (iptables) were used for policy items the router could not express.
 
-Policy enforcement was implemented primarily in pfSense, with host-level controls applied where router enforcement was insufficient.
+**Corporate policy summary**
+- Server: HTTP and SSH allowed internally; HTTP allowed externally (read-only).  
+- Workstations: allowed to initiate internal access but not host external services.  
+- Server must not initiate external connections.  
+- External hosts should not be able to ping internal hosts.
 
-**Corporate policy summary:**
-- Server provides HTTP and SSH internally, HTTP only externally
-- Workstations may access services but must not host them
-- Server must not initiate external connections
-- External hosts cannot ping internal hosts
-
-### Access Control Matrix
-
+### Access control matrix
 <img src="https://i.imgur.com/p4HTJUe.png" width="60%">
 
-### pfSense Rules
-
-**WAN Rules**  
+### pfSense rules (visual snapshots)
+**WAN rules**  
 <img src="https://i.imgur.com/DOAkzbD.png" width="60%">
 
-**LAN Rules**  
+**LAN rules**  
 <img src="https://i.imgur.com/TYuD7lH.png" width="60%">
 
-**OPT1 Rules**  
+**OPT1 rules**  
 <img src="https://i.imgur.com/7YP6lje.png" width="60%">
 
 ---
 
-## Post-Implementation Verification
-
-- Nmap confirmed only authorized services were exposed
-- Wireshark verified blocked traffic
-- Logs validated rule enforcement
+## Post-implementation verification
+- Nmap confirmed only authorized services were exposed after rules applied.  
+- Wireshark captures validated that blocked traffic did not traverse internal interfaces.  
+- System and firewall logs corroborated rule enforcement.
 
 <img src="https://i.imgur.com/bZeB44P.png" width="60%">
 <img src="https://i.imgur.com/nYRv0ry.png" width="60%">
@@ -136,9 +139,8 @@ Policy enforcement was implemented primarily in pfSense, with host-level control
 
 ---
 
-## Task VI: Server Local Firewall Implementation (A.1)
-
-Host-level iptables rules enforced policies not visible to the router.
+## Host-level firewall (server A.1)
+Applied host-level iptables rules to enforce policies that could not be implemented at the gateway.
 
 ```bash
 sudo iptables -A OUTPUT -d 192.168.20.0/24 -j DROP
@@ -147,3 +149,8 @@ sudo iptables -A INPUT -p tcp --dport 80 -j ACCEPT
 sudo iptables -A INPUT -p icmp -s 192.168.10.0/24 -j ACCEPT
 ```
 <img src="https://i.imgur.com/f1mLB6a.png" width="60%"> <img src="https://i.imgur.com/W7tmMXL.png" width="60%">
+
+## Summary Outcomes
+- Created a reproducible lab environment for network policy testing and security validation.
+- Implemented defense-in-depth with combined router and host controls.
+- Validated enforcement and produced reproducible evidence (scans, captures, and logs) to support detection and remediation workflows
